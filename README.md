@@ -1,37 +1,17 @@
-## Welcome to GitHub Pages
+# Description
 
-You can use the [editor on GitHub](https://github.com/bioinformatics-core-shared-training/r-for-medics/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This is intended to be a short introduction, or crash-course, to those wanting to learn the R language. We aim to introduce some key concepts and give references on where to obtain more-detailed information
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Materials
 
-### Markdown
+- [Compiled (HTML)](notes.html)
+- [Source (Markdown)](notes.Rmd)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# Further Reading
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/bioinformatics-core-shared-training/r-for-medics/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+- [Solving Biological Problems with R](http://cambiotraining.github.io/r-intro/)
+- [Introduction to Data Science with R](http://shop.oreilly.com/product/0636920034834.do)
+- [Coursera course in R](http://blog.revolutionanalytics.com/2012/12/coursera-videos.html)
+- [Beginners Introduction to R Statistical Software](http://bitesizebio.com/webinar/20600/beginners-introduction-to-r-statistical-software/)
+- [R programming wiki](https://en.wikibooks.org/wiki/R_Programming)
+- [Quick R](http://www.statmethods.net/)
