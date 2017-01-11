@@ -743,6 +743,8 @@ boxplot(gapminder$gdpPercap ~ gapminder$continent,col=brewer.pal(5,"Set1"),
 
 We can't really have a run-through of the R language without at least *mentioning* statistics! However, like plotting it is a vast field. The main challenges are putting your data in the correct format (which we have covered here), and deciding which test to use (**which R will not advise you on!**) 
 
+![](images/clippy.jpg)
+
 - If you have some background in statistics you can see this course from the [Babraham Institute Bioinformatics Core](http://www.bioinformatics.babraham.ac.uk/training/R_Statistics/Introduction%20to%20Statistics%20with%20R.pdf) about how to perform statistical testing in R.
 - If you need a more basic grounding in which statistical test to use, you can see this course from [CRUK Cambridge Institute](http://bioinformatics-core-shared-training.github.io/IntroductionToStats/)
   
