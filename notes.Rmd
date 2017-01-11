@@ -91,20 +91,41 @@ To get started, you will need to install the [latest version of R](https://cran.
 Once installed, you should be able to launch RStudio by clicking on its icon:-
 
 ![](http://www.rstudio.com/wp-content/uploads/2014/03/blue-125.png)
+## Entering commands in R
 
-The bottom-left with the blinking cursor is the R console `>` and ready for you to start entering R commands
+- The traditional way to enter R commands is via the Terminal, or using the console in RStudio (bottom-left panel when RStudio opens for first time).
+- However, for this course we will use a relatively new feature called *R-notebooks*.
+- An R-notebook mixes plain text with R code
+    + The R code can be run from inside the document and the results are displayed directly underneath
+- Each *chunk* of R code looks something like this. 
 
-# Getting started
+```{r}
+
+```
+
+- Each line of R can be executed by clicking on the line and pressing CTRL and ENTER
+- Or you can press the green triangle on the right-hand side to run everything in the chunk
+- Try this now!
+
+```{r}
+print("Hello World")
+
+```
+
+At a basic level, we can use R as a calculator to compute simple sums with the `+`, `-`, `*` (for multiplication) and `/` (for division) symbols. 
 
 ![](images/128px-SHARP_ELSIMATE_EL-W221.jpg)
 
-At a basic level, we can use R as a calculator to compute simple sums with the `+`, `-`, `*` (for multiplication) and `/` (for division) symbols. 
+
+Try adding some of your own calculations below....
 
 ```{r}
 2 + 2
 2 - 2
 4 * 3
 10 / 2
+
+
 ```
 
 The answer is displayed at the console with a `[1]` in front of it. The `1` inside the square brackets is a place-holder to signify how many values were in the answer (in this case only one). We will talk about dealing with lists of numbers shortly...
@@ -177,7 +198,6 @@ myNumber
 
 When we are feeling lazy we might give our variables short names (`x`, `y`, `i`...etc), but a better practice would be to give them meaningful names. There are some restrictions on creating variable names. They cannot start with a number or contain characters such as `.`, `_`, '-'. Naming variables the same as in-built functions in R, such as `c`, `T`, `mean` should also be avoided.
 
-Naming variables is a matter of taste. Some [conventions](http://adv-r.had.co.nz/Style.html) exist such as a separating words with `-` or using *C*amel*C*aps. Whatever convention you decided, stick with it!
 
 ## Functions
 
@@ -198,6 +218,10 @@ seq(2, 20, 4)
 ```
 
 Arguments can have *default* values, meaning we do not need to specify values for these in order to run the function.
+
+```{r}
+seq(2, 20, 4)
+```
 
 `rnorm` is a function that will generate a series of values from a *normal distribution*. In order to use the function, we need to tell R how many values we want
 
@@ -238,12 +262,6 @@ library(beadarray)
 
 There are functions for installing packages within R. If your package is part of the main **CRAN** repository, you can use `install.packages`
 
-We will be using the `gapminder` R package in this practical. To install it, we would do.
-
-```{r eval=FALSE}
-install.packages("gapminder")
-```
-
 *Bioconductor* packages have their own install script, which you can download from the Bioconductor website
 
 ```{r eval=FALSE}
@@ -283,7 +301,7 @@ Any `.csv` file in the working directory can be imported into R by supplying the
 file.exists("gapminder.csv")
 ```
 
-If the file we want to read is not in the current working directory, we will have to write the path to the file; either *relevant* to the current working directory (e.g. the directory "up" from the current working directory, or in a sub-folder), or the full path. In an interactive session, you can do use `file.choose` to open a dialogue box. The path to the the file will then be displayed in R.
+If the file we want to read is not in the current working directory, we will have to write the path to the file; either *relative* to the current working directory (e.g. the directory "up" from the current working directory, or in a sub-folder), or the full path. In an interactive session, you can do use `file.choose` to open a dialogue box. The path to the the file will then be displayed in R.
 
 ```{r eval=FALSE}
 file.choose()
@@ -295,7 +313,7 @@ Assuming the file can be found, we can use `read.csv` to import. Other functions
 gapminder <- read.csv("gapminder.csv")
 ```
 
-The latest version of RStudio (> 1.0.44) provides the option to import data from the File menu. Try ***File*** -> ***Import Dataset*** -> ***From Csv***.
+N.B. The latest version of RStudio (> 1.0.44) provides the option to import data from the File menu. Try ***File*** -> ***Import Dataset*** -> ***From Csv***.
 
 The data frame object in R allows us to work with "tabular" data, like we might be used to dealing with in Excel, where our data can be thought of having rows and columns. The values in each column have to all be of the same type (i.e. all numbers or all text).
 
@@ -316,6 +334,7 @@ These references will guide you through some of the pitfalls and common mistakes
 
 ### Exercise
 
+- Read the file `gapminder.csv` using the `read.csv` function and save the result as a variable
 - What are the dimensions of the data frame?
 - What columns are available?
   + HINT: see the `dim`, `ncol`, `nrow` and `colnames` functions
@@ -432,7 +451,7 @@ A common shortcut is `head` which prints the first six rows of a data frame.
 head(gapminder)
 ```
 
-When subsetting entire rows ***you need to remember the , after the row indices***. If you fail to do so, R may still return a result. However, it probably won't be what you expected. Look what happens tf you wanted to the first three rows but typed the following command
+When subsetting entire rows ***you need to remember the , after the row indices***. If you fail to do so, R may still return a result. However, it probably won't be what you expected. Look what happens if you wanted to the first three rows but typed the following command
 
 ```{r eval=FALSE}
 gapminder[1:3]
@@ -474,11 +493,6 @@ Using the column names is also valid
 gapminder[gapminder$lifeExp < 40, c("country", "continent","year")]
 ```
 
-```{r echo=FALSE}
-head(gapminder[gapminder$lifeExp < 40, c("country", "continent","year")])
-```
-
-
 
 Testing for equality can be done using `==`. This will only give `TRUE` for entries that are *exactly* the same as the test string. 
 
@@ -493,23 +507,19 @@ N.B. For partial matches, the `grep` function and / or *regular expressions* (if
 gapminder[grep("land", gapminder$country),]
 ```
 
-```{r echo=FALSE}
-head(gapminder[grep("land", gapminder$country),])
-```
+
 
 
 There are a couple of ways of testing for more than one text value. The first uses an *or* `|` statement. i.e. testing if the value of `country` is `Zambia` *or* the value is `Zimbabwe`.
 
 The `%in%` function is a convenient function for testing which items in a vector correspond to a defined set of values.
 
-```{r eval=FALSE}
+```{r}
 gapminder[gapminder$country == "Zambia" | gapminder$country == "Zimbabwe",]
 gapminder[gapminder$country %in% c("Zambia","Zimbabwe"),]
 ```
 
-```{r echo=FALSE}
-head(gapminder[gapminder$country == "Zambia" | gapminder$country == "Zimbabwe",])
-```
+
 
 
 Similar to *or*, we can require that both tests are `TRUE` by using an *and* `&` operation. e.g. which years in Zambia had a life expectancy less than 40
