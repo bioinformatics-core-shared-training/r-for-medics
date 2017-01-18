@@ -8,6 +8,12 @@ output: html_document
 
 # A short introduction to R
 
+## Website
+
+Includes a pretty HTML version of this file
+
+tinyurl.com/r-for-medics
+
 ## Outline
 
 In this session, we introduce some of the fundamentals of the R language. 
@@ -288,10 +294,19 @@ file.exists("gapminder.csv")
 If the file we want to read is not in the current working directory, we will have to write the path to the file; either *relative* to the current working directory (e.g. the directory "up" from the current working directory, or in a sub-folder), or the full path. In an interactive session, you can do use `file.choose` to open a dialogue box. The path to the the file will then be displayed in R.
 
 ```{r eval=FALSE}
-file.choose()
+myfile <- "/Users/dunnin01/Documents/git/r-for-medics/gapminder.csv"
+```
+
+Unsure about accessing directory structures at the command line? Take a course on [Unix](http://bioinformatics-core-shared-training.github.io/shell-novice/)
+
+```{r eval=FALSE}
+myfile <- file.choose()
+myfile
 ```
 
 Assuming the file can be found, we can use `read.csv` to import. Other functions can be used to read tab-delimited files (`read.delim`) or a generic `read.table` function. A data frame object is created.
+
+- If you get an error saying *Error in file(file, "rt") : cannot open the connection*, you might need to change your working directory or make sure the file name is typed correctly (R is *case-sensitive*)
 
 ```{r}
 gapminder <- read.csv("gapminder.csv")
@@ -450,10 +465,20 @@ gapminder[1:3]
 
 Rather than selecting rows based on their *numeric* index (as in the previous example) we can use what we call a *logical test*. This is a test that gives either a `TRUE` or `FALSE` result. When applied to subsetting, only rows with a `TRUE` result get returned.
 
+```{r}
+myvec <- c("A","B","C","D")
+x <- c(TRUE, TRUE,FALSE,TRUE)
+myvec[x]
+x <- c(FALSE, FALSE,FALSE,TRUE)
+
+```
+
+
 For example we could compare the `lifeExp` variable to 40. The result is a *vector* of `TRUE` or `FALSE`; one for each row in the data frame
 
 ```{r}
 gapminder$lifeExp < 40
+
 ```
 
 This R code can be put inside the square brackets to select rows of interest (those observations where the life expectancy variable is less than 40). 
