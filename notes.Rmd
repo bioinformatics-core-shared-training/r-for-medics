@@ -310,7 +310,6 @@ Assuming the file can be found, we can use `read.csv` to import. Other functions
 
 ```{r}
 gapminder <- read.csv("gapminder.csv")
-gapminder
 ```
 
 N.B. The latest version of RStudio (> 1.0.44) provides the option to import data from the File menu. Try ***File*** -> ***Import Dataset*** -> ***From Csv***.
@@ -373,9 +372,8 @@ dim(test)
 We can access the columns of a data frame by knowing the column name. 
 ***TIP*** Use auto-complete with the ***TAB*** key to get the name of the column correct
 
-```{r}
+```{r eval=FALSE}
 gapminder$country
-
 ```
 
 
@@ -476,42 +474,42 @@ x <- c(FALSE, FALSE,FALSE,TRUE)
 
 For example we could compare the `lifeExp` variable to 40. The result is a *vector* of `TRUE` or `FALSE`; one for each row in the data frame
 
-```{r}
+```{r eval=FALSE}
 gapminder$lifeExp < 40
 
 ```
 
 This R code can be put inside the square brackets to select rows of interest (those observations where the life expectancy variable is less than 40). 
 
-```{r}
+```{r eval=FALSE}
 gapminder[gapminder$lifeExp < 40, ]
 ```
 
 
 The `,` is important as this tells R to display all columns. If we wanted a subset of the columns we would put their indices after the `,`
 
-```{r}
+```{r eval=FALSE}
 gapminder[gapminder$lifeExp < 40, 1:4]
 ```
 
 
 Using the column names is also valid
 
-```{r}
+```{r eval=FALSE}
 gapminder[gapminder$lifeExp < 40, c("country", "continent","year")]
 ```
 
 
 Testing for equality can be done using `==`. This will only give `TRUE` for entries that are *exactly* the same as the test string. 
 
-```{r}
+```{r eval=FALSE}
 gapminder[gapminder$country == "Zambia",]
 
 ```
 
 N.B. For partial matches, the `grep` function and / or *regular expressions* (if you know them) can be used.
 
-```{r}
+```{r eval=FALSE} 
 gapminder[grep("land", gapminder$country),]
 ```
 
@@ -522,7 +520,7 @@ There are a couple of ways of testing for more than one text value. The first us
 
 The `%in%` function is a convenient function for testing which items in a vector correspond to a defined set of values.
 
-```{r}
+```{r eval=FALSE}
 gapminder[gapminder$country == "Zambia" | gapminder$country == "Zimbabwe",]
 gapminder[gapminder$country %in% c("Zambia","Zimbabwe"),]
 ```
@@ -532,7 +530,7 @@ gapminder[gapminder$country %in% c("Zambia","Zimbabwe"),]
 
 Similar to *or*, we can require that both tests are `TRUE` by using an *and* `&` operation. e.g. which years in Zambia had a life expectancy less than 40
 
-```{r}
+```{r eval=FALSE}
 gapminder[gapminder$country == "Zambia" & gapminder$lifeExp < 40,]
 ```
 
@@ -583,7 +581,7 @@ write.csv(byWealth, file="dataOrderedByWealth.csv")
 
 We can even order by more than one condition
 
-```{r}
+```{r eval=FALSE}
 gapminder[order(gapminder$year, gapminder$country),]
 ```
 
