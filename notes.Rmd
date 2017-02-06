@@ -2,7 +2,10 @@
 title: "R Primer"
 author: "Mark Dunning"
 date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
-output: html_document
+output: 
+  html_notebook: 
+    toc: yes
+    toc_float: yes
 ---
 
 
@@ -12,7 +15,7 @@ output: html_document
 
 Includes a pretty HTML version of this file
 
-tinyurl.com/r-for-medics
+[tinyurl.com/r-for-medics](tinyurl.com/r-for-medics)
 
 ## Outline
 
@@ -247,10 +250,18 @@ The **Packages** tab in the bottom-right panel of RStudio lists all packages tha
 
 
 ```{r eval=FALSE}
-library(beadarray)
+library(RColorBrewer)
 ```
 
-There are functions for installing packages within R. If your package is part of the main **CRAN** repository, you can use `install.packages`
+There are functions for installing packages within R. If your package is part of the main **CRAN** repository, you can use `install.packages`.
+
+- Here, `tidyr` is a useful package for cleaning and reshaping data:-
+
+```{r eval=FALSE}
+install.packages("tidyr")
+```
+
+
 
 *Bioconductor* packages have their own install script, which you can download from the Bioconductor website
 
@@ -310,6 +321,7 @@ Assuming the file can be found, we can use `read.csv` to import. Other functions
 
 ```{r}
 gapminder <- read.csv("gapminder.csv")
+gapminder
 ```
 
 N.B. The latest version of RStudio (> 1.0.44) provides the option to import data from the File menu. Try ***File*** -> ***Import Dataset*** -> ***From Csv***.
@@ -325,34 +337,6 @@ These references will guide you through some of the pitfalls and common mistakes
 - [Formatting data tables in Spreadsheets](http://www.datacarpentry.org/spreadsheet-ecology-lesson/01-format-data.html)
 - [Data Organisation tutorial by Karl Broman](http://kbroman.org/dataorg/)
 - [The Quartz guide to bad data](https://github.com/Quartz/bad-data-guide/blob/master/README.md)
-
-
-******
-******
-******
-
-
-
-### Exercise
-
-- Read the file `gapminder.csv` using the `read.csv` function and save the result as a variable
-- What are the dimensions of the data frame?
-- What columns are available?
-  + HINT: see the `dim`, `ncol`, `nrow` and `colnames` functions
- 
-******
-******
-******
-
-
-```{r}
-
-## Your answer here ####
-
-
-```
-
-
 
 In RStudio , you can view the contents of the data frame we have just created. This is useful for interactive exploration of the data, but not so useful for automation and scripting and analyses.
 
@@ -398,10 +382,11 @@ summary(gapminder)
 
 ### Exercise
 
-- Save the life expectancy and population as variables
-    + what is the maximum life expectancy?
-    + what is the smallest population?
+- Create new variables for the life expectancy and population columns
     + round the life expectancy and populations to the nearest whole numbers
+    + modify the population variable so that the population size is given in millions of people
+    + what is the maximum life expectancy observed?
+    + what is the smallest population observed?  
     + HINT:- `min`, `max`, `round`.....
     
 ******
@@ -415,7 +400,7 @@ summary(gapminder)
 ```
 
 
-## Subsetting
+## Subsetting rows and columns
 
 A data frame can be subset using square brackes`[]` placed after the name of the data frame. As a data frame is a two-dimensional object, you need both a *row* and *column* index.
 
@@ -461,6 +446,20 @@ gapminder[1:3]
 ```
 
 
+We can also create new columns, or alter existing ones
+
+- Using an assignment operator `<-` we can assign the value of a particular column to be vector
+    + if the column doesn't exist, it will be created
+    + the vector should be the same length as the number of rows in the data frame
+
+```{r}
+gapminder$popInMillions <- gapminder$pop / 1000000
+gapminder$lifeExp <- round(gapminder$lifeExp,1)
+gapminder
+```
+
+## Filtering rows
+
 Rather than selecting rows based on their *numeric* index (as in the previous example) we can use what we call a *logical test*. This is a test that gives either a `TRUE` or `FALSE` result. When applied to subsetting, only rows with a `TRUE` result get returned.
 
 ```{r}
@@ -481,35 +480,35 @@ gapminder$lifeExp < 40
 
 This R code can be put inside the square brackets to select rows of interest (those observations where the life expectancy variable is less than 40). 
 
-```{r eval=FALSE}
+```{r}
 gapminder[gapminder$lifeExp < 40, ]
 ```
 
 
 The `,` is important as this tells R to display all columns. If we wanted a subset of the columns we would put their indices after the `,`
 
-```{r eval=FALSE}
+```{r}
 gapminder[gapminder$lifeExp < 40, 1:4]
 ```
 
 
 Using the column names is also valid
 
-```{r eval=FALSE}
+```{r }
 gapminder[gapminder$lifeExp < 40, c("country", "continent","year")]
 ```
 
 
 Testing for equality can be done using `==`. This will only give `TRUE` for entries that are *exactly* the same as the test string. 
 
-```{r eval=FALSE}
+```{r}
 gapminder[gapminder$country == "Zambia",]
 
 ```
 
 N.B. For partial matches, the `grep` function and / or *regular expressions* (if you know them) can be used.
 
-```{r eval=FALSE} 
+```{r} 
 gapminder[grep("land", gapminder$country),]
 ```
 
@@ -520,7 +519,7 @@ There are a couple of ways of testing for more than one text value. The first us
 
 The `%in%` function is a convenient function for testing which items in a vector correspond to a defined set of values.
 
-```{r eval=FALSE}
+```{r}
 gapminder[gapminder$country == "Zambia" | gapminder$country == "Zimbabwe",]
 gapminder[gapminder$country %in% c("Zambia","Zimbabwe"),]
 ```
@@ -530,7 +529,7 @@ gapminder[gapminder$country %in% c("Zambia","Zimbabwe"),]
 
 Similar to *or*, we can require that both tests are `TRUE` by using an *and* `&` operation. e.g. which years in Zambia had a life expectancy less than 40
 
-```{r eval=FALSE}
+```{r}
 gapminder[gapminder$country == "Zambia" & gapminder$lifeExp < 40,]
 ```
 
@@ -607,7 +606,11 @@ All your favourite types of plot can be created in R
     + [Introductory R course](http://cambiotraining.github.io/r-intro/)
     + [Quick-R](http://www.statmethods.net/graphs/index.html)
     
-Plots can be constructed from vectors of numeric data, such as the data we get from a particular column in a data frame
+Plots can be constructed from vectors of numeric data, such as the data we get from a particular column in a data frame.
+
+## Basic Plot types
+
+- A histogram is a common choice if we want to visualise the distribution of a numeric variables
 
 ```{r}
 hist(gapminder$lifeExp)
@@ -622,8 +625,14 @@ plot(gapminder$pop,gapminder$lifeExp)
 
 Barplots are commonly-used for counts of categorical data
 
+- Let's say we want to know how many countries there are 
+- `table` will give us the total number of times each country is observed
+    + but the set of countries is repeated for each year
+    
 ```{r}
-barplot(table(gapminder$continent))
+table(gapminder$continent)
+table(gapminder$continent[gapminder$year==2002])
+barplot(table(gapminder$continent[gapminder$year==2002]))
 ```
 
 Boxplots are good for visualising and comparing distributions. Here the `~` symbol sets up a formula, the effect of which is to put the categorical variable on the `x` axis and continuous variable on the `y` axis.
@@ -662,75 +671,173 @@ boxplot(gapminder$gdpPercap ~ gapminder$continent,col=c("red","orange","green","
         ylab="GDP")
 ```
 
+******
+******
+******
+
+## Exercise
+
+- First, create a subset of observations from the year **1952**
+- Do countries with a higher GDP tend to have a higher life expectancy?
+    + use a scatter plot to find out
+- Is there an overall difference in life expectancy between continents?
+    + use a boxplot to find out
+
+******
+******
+******
+
+```{r}
+## Your answer here##
+
+
+```
+
+
 Plots can be exported by the ***Plots*** tab in RStudio, which is useful in an interactive setting. However, one can also save plots to a file calling the `pdf` or `png` functions before executing the code to create the plot. 
  
+
  
 ```{r}
 pdf("myLittlePlot.pdf")
-barplot(table(gapminder$continent))
+boxplot(gapminder$gdpPercap ~ gapminder$continent,col=c("red","orange","green","blue","purple"),
+        main="GDP per-continent",
+        xlab="Continent",
+        ylab="GDP")
 dev.off()
 ```
 
 Any plots created in-between the `pdf(..)` and `dev.off()` lines will get saved to the named file. The `dev.off()` line is very important; without it you will not be able to view the plot you have created. `pdf` files are useful because you can create documents with multiple pages. Moreover, they can be imported into tools such as Adobe Illustrator to be incorporated with other graphics. 
 
+- Often it is quicker to save a plot as a pdf and tinker in Illustrator rather than getting R to do exactly what you want
+
+```{r}
+pdf("gapminder-plots.pdf")
+plot(gapminder$pop,gapminder$lifeExp,pch=16,
+     col="red",ylab="Life Expectancy",
+     xlab="Population",main="Life Expectancy trend with population")
+boxplot(gapminder$gdpPercap ~ gapminder$continent,col=c("red","orange","green","blue","purple"),
+        main="GDP per-continent",
+        xlab="Continent",
+        ylab="GDP")
+dev.off()
+```
+
+
 ## The canvas model
 
 It is important to realise that base graphics in R uses a *"canvas model"* to create graphics. We can only overlay extra information on-top of an exising plot and cannot "undo" what is already drawn.
 
-Let's suppose we want to visualise and life expectancy and population of countries in Europe and Africa. First, create two datasets to represent European and African countries in the year 2002
+Let's suppose we want to compare the relationship between GDP and Life Expectancy in 1952 and 2002
+
+- A variety of functions can be used to add extra data / annotations to a plot. e.g.
+    - `points`
+    - `lines`
+    - `text`
+    - `legend`
 
 ```{r}
-euroData <- gapminder[gapminder$continent == "Europe" & gapminder$year == 2002,]
-dim(euroData)
+oldData <- gapminder[gapminder$year == 1952,]
+oldData
 ```
 
 ```{r}
-afrData <- gapminder[gapminder$continent == "Africa" & gapminder$year == 2002,]
-dim(afrData)
+newData <- gapminder[gapminder$year == 2002,]
+newData
+newData
 ```
 
-We can start by plotting the life expectancy of the European countries as red dots.
+We can start by plotting the life expectancy of the 1952 observations as red dots.
 
 ```{r}
-plot(euroData$pop, euroData$lifeExp,col="red",
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
      pch=16,
-     xlab="Population",
+     xlab="GDP",
      ylab="Life Expectancy")
 ```
 
-The `points` function can be used put extra points corresponding to African countries on the existing plot. 
+The `points` function can be used to addt extra points corresponding to 2002 countries on the existing plot. 
+
+- Something doesn't look right though...
 
 ```{r}
-plot(euroData$pop, euroData$lifeExp,col="red",
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
      pch=16,
-     xlab="Population",
+     xlab="GDP",
      ylab="Life Expectancy")
-points(afrData$pop, afrData$lifeExp,col="blue",pch=16)
+
+points(newData$gdpPercap, newData$lifeExp,col="blue",
+     pch=16,
+     xlab="GDP",
+     ylab="Life Expectancy")
 ```
 
 
-Wait, how many African countries did we have?
+The problem here is that the initial limits of the y axis were defined using the life expectancy range of the 1952 data. We can only add points to the existing plotting window, so anycountries with life expectancy outside this range in 2002 will not get displayed.
 
 ```{r}
-nrow(afrData)
-```
+range(oldData$lifeExp)
+range(oldData$gdpPercap)
+range(newData$lifeExp)
+range(newData$gdpPercap)
 
-The problem here is that the initial limits of the y axis were defined using the life expectancy range of the European data. We can only add points to the existing plotting window, so any African countries with life expectancy outside this range will not get displayed.
+```
 
 We can define the axes when we create the plot using `xlim` and `ylim`.
 
 ```{r}
-plot(euroData$pop, euroData$lifeExp,col="red",
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
      pch=16,
-     xlab="Population",
+     xlab="GDP",
      ylab="Life Expectancy",
-     xlim=c(0,8e7),ylim=c(30,90))
-points(afrData$pop, afrData$lifeExp,col="blue",pch=16)
+     xlim=c(0,1.1e5),ylim=c(30,90))
+points(newData$gdpPercap, newData$lifeExp,col="blue",pch=16)
 ```
 
-Other useful functions for adding features to an existing plot include `text`, `abline`, `grid`, `legend` among others
+A legend can also be added using the `legend` function
 
-Another useful trick for plotting is to take advantage of pre-existing colour palettes in R. The `RColorBrewer` package is a useful package for such palettes; many of which are friendly to those with visual impairments.
+- You can specify a set of coordinates where you want to display the legend, but there are also shortcuts
+
+```{r}
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
+     pch=16,
+     xlab="GDP",
+     ylab="Life Expectancy",
+     xlim=c(0,1.1e5),ylim=c(30,90))
+points(newData$gdpPercap, newData$lifeExp,col="blue",pch=16)
+legend("topright", legend=c(1952,2002),col=c("red","blue"),pch=16)
+```
+
+What is that outlier on the GDP axis?
+
+- We should now know how to create a logical vector
+- The `which` function can then be used to identify the particular indices that are `TRUE`
+
+```{r}
+
+## Some code here
+
+```
+
+The `text` function works in a similar way to `points`
+
+- You give it the set of x and y coordinates you want to plot
+    + plus also a set of labels
+    
+```{r}
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
+     pch=16,
+     xlab="GDP",
+     ylab="Life Expectancy",
+     xlim=c(0,1.1e5),ylim=c(30,90))
+points(newData$gdpPercap, newData$lifeExp,col="blue",pch=16)
+legend("topright", legend=c(1952,2002),col=c("red","blue"),pch=16)
+crazyValue <- which(oldData$gdpPercap > 100000)
+text(oldData$gdpPercap[crazyValue], oldData$lifeExp[crazyValue],labels = oldData$country[crazyValue])
+```
+
+
+A useful trick to make plots look nice is to take advantage of pre-existing colour palettes in R. The `RColorBrewer` package is a useful package for such palettes; many of which are friendly to those with visual impairments.
 
 ```{r}
 library(RColorBrewer)
@@ -747,7 +854,50 @@ boxplot(gapminder$gdpPercap ~ gapminder$continent,col=brewer.pal(5,"Set1"),
         ylab="GDP")
 ```
 
+## Plot Layouts
 
+A further solution to the problem of comparing different years might be to have two plots arranged side-by-side
+
+- One option that can be set with `par` is *m*ultiple *f*igures by *row*
+    + argument is a vector containing number of columns and rows in the figure
+
+```{r}
+par(mfrow=c(1,2))
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
+     pch=16,
+     xlab="GDP",
+     ylab="Life Expectancy",
+     xlim=c(0,1.1e5),ylim=c(30,90))
+
+plot(newData$gdpPercap, newData$lifeExp,col="blue",
+     pch=16,
+     xlab="GDP",
+     ylab="Life Expectancy",
+     xlim=c(0,1.1e5),ylim=c(30,90))
+
+```
+
+Don't need to have the same kind of plot in each cell.
+
+
+```{r}
+par(mfrow=c(1,2))
+plot(oldData$gdpPercap, oldData$lifeExp,col="red",
+     pch=16,
+     xlab="GDP",
+     ylab="Life Expectancy",
+     xlim=c(0,1.1e5),ylim=c(30,90))
+
+boxplot(oldData$lifeExp ~ oldData$continent)
+
+```
+
+There is plenty more to know about plotting that we don't have time to cover
+
+- adding lines of best fit with `abline`
+- adding grids with `grid`
+- control over axis appearance and labels with `axis`
+- see references at start of section
 
 ## Statistical Testing
 
@@ -802,10 +952,12 @@ wilcox.test(x,y,var.equal = FALSE)
 
 ### Exercise
 
-In the year 2002, was there a significant different in the life expectancies of European and African countries in the Year 2002?
-  - Use the data in `euroData` and `afrData` to find out
-  - First subset `euroData` and `afrData` to contain only information for the year 2002
-  
+Between the years 1952 and 2002, was there a significant improvement in the life expectancy?
+  - Use the data in `oldData` and `newData` to find out
+  - Do the data look to be normally-disributed?
+      + if not, which test would you use?
+      + are these paired or independant data?
+      
 ******
 ******
 ******
@@ -814,5 +966,33 @@ In the year 2002, was there a significant different in the life expectancies of 
 
 ### Your answer here ###
 
+```
+
+
+# Wrap-up
+
+- Thanks for your attention
+- Practice, practice, practice
+    + ...& persevere
+- Need inspiration? R code is freely-available, so read other people's code
+    + Read the [blogs](http://www.r-bloggers.com/)
+    + Follow the [forums](http://stackoverflow.com/questions/tagged/r)
+    + Download [datasets](http://vincentarelbundock.github.io/Rdatasets/datasets.html) to practice with
+    + Bookmark some [reference](https://en.wikibooks.org/wiki/R_Programming) guides
+- The [website](tinyurl.com/r-for-medics) will be available after the course
+
+
+    
+```{r}
+
+gapminder <- read.csv("gapminder.csv")
+
+
+```
+
+# Summary of commands
+
+```{r}
+library(datasets)
 ```
 
