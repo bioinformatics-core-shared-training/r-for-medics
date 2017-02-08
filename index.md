@@ -18,7 +18,7 @@ Topics covered include:-
 
 # Materials
 
-- [Compiled (HTML)](notes.html)
+- [Compiled (HTML)](notes.nb.html)
 - [Source (Markdown)](notes.Rmd)
 
 # Data
