@@ -122,6 +122,10 @@ print("Hello World")
 
 ```
 
+- You can add R chunks by pressing CRTL + ALT + I
+    + or using the Insert menu option
+    + (can also include code from other languages such as Python or bash)
+    
 At a basic level, we can use R as a calculator to compute simple sums with the `+`, `-`, `*` (for multiplication) and `/` (for division) symbols. 
 
 ![](images/128px-SHARP_ELSIMATE_EL-W221.jpg)
@@ -307,7 +311,7 @@ If the file we want to read is not in the current working directory, we will hav
 myfile <- "/Users/dunnin01/Documents/git/r-for-medics/gapminder.csv"
 ```
 
-Unsure about accessing directory structures at the command line? Take a course on [Unix](http://bioinformatics-core-shared-training.github.io/shell-novice/)
+Unsure about accessing directory structures at the command line? Take a course on [Unix](http://bioinformatics-core-shared-training.github.io/shell-novice/) or try out this [online command line bootcamp](rik.smith-unna.com/command_line_bootcamp/)
 
 ```{r eval=FALSE}
 myfile <- file.choose()
